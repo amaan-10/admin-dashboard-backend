@@ -38,32 +38,21 @@ router.put(
   }
 );
 
-// Assign permissions to a role (Admin only)
-router.put(
-  "/assign-permission",
+router.delete(
+  "/delete/:id",
   verifyToken,
   authorizeRole("Admin"),
   async (req, res) => {
-    const { roleId, permissionId } = req.body;
+    const { id } = req.params;
 
     try {
-      const role = await Role.findById(roleId);
-      const permission = await Permission.findById(permissionId);
-
-      if (!role || !permission) {
-        return res
-          .status(404)
-          .json({ message: "Role or Permission not found" });
+      const user = await User.findById(id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
       }
 
-      if (!role.permissions.includes(permissionId)) {
-        role.permissions.push(permissionId);
-        await role.save();
-      }
-
-      res
-        .status(200)
-        .json({ message: "Permission assigned successfully", role });
+      await user.remove();
+      res.status(200).json({ message: "User deleted successfully" });
     } catch (err) {
       res.status(500).json({ message: "Server error", error: err.message });
     }

@@ -133,4 +133,36 @@ router.delete(
   }
 );
 
+// Assign permissions to a role (Admin only)
+router.put(
+  "/assign-permission",
+  verifyToken,
+  authorizeRole("Admin"),
+  async (req, res) => {
+    const { roleId, permissionId } = req.body;
+
+    try {
+      const role = await Role.findById(roleId);
+      const permission = await Permission.findById(permissionId);
+
+      if (!role || !permission) {
+        return res
+          .status(404)
+          .json({ message: "Role or Permission not found" });
+      }
+
+      if (!role.permissions.includes(permissionId)) {
+        role.permissions.push(permissionId);
+        await role.save();
+      }
+
+      res
+        .status(200)
+        .json({ message: "Permission assigned successfully", role });
+    } catch (err) {
+      res.status(500).json({ message: "Server error", error: err.message });
+    }
+  }
+);
+
 module.exports = router;

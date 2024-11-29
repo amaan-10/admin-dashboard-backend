@@ -37,4 +37,25 @@ router.get("/get", verifyToken, authorizeRole("Admin"), async (req, res) => {
   }
 });
 
+router.delete(
+  "/delete/:id",
+  verifyToken,
+  authorizeRole("Admin"),
+  async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const permission = await Permission.findById(id);
+      if (!permission) {
+        return res.status(404).json({ message: "Permission not found" });
+      }
+
+      await permission.remove();
+      res.status(200).json({ message: "Permission deleted successfully" });
+    } catch (err) {
+      res.status(500).json({ message: "Server error", error: err.message });
+    }
+  }
+);
+
 module.exports = router;
