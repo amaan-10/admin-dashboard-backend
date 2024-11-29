@@ -166,12 +166,14 @@ To demonstrate the functionality of the **Role-Based Access Control (RBAC)** sys
 -   Use the **Register** endpoint (`POST /api/auth/register`) to create a new user.
 -   Example Request:
 
-    `{
+    ```bash
+    {
       "username": "john_doe",
       "email": "john.doe@example.com",
       "password": "password123"
       "role": "Admin" //It can be any but only Admin has right to navigate through-out the app.
-    }`
+    }
+    ```
 
 ### 3\. **Login as a User**
 
@@ -179,16 +181,20 @@ To demonstrate the functionality of the **Role-Based Access Control (RBAC)** sys
 
 -   Example Request:
 
-    `{
+    ```bash
+    {
       "email": "john.doe@example.com",
       "password": "password123"
-    }`
+    }
+    ```
 
 -   The response will include the token:
 
-    `{
+    ```bash
+    {
       "token": "your_jwt_token_here"
-    }`
+    }
+    ```
 
 ### 4\. **Access Role-Based Endpoints**
 
@@ -196,7 +202,9 @@ To demonstrate the functionality of the **Role-Based Access Control (RBAC)** sys
 -   Example: **Get all roles** (`GET /api/roles/`) or **Create a role** (`POST /api/roles/create`) requires authentication.
 -   In your request header, include the token:
 
-    `Authorization: your_jwt_token_here`
+    ```bash
+    Authorization: your_jwt_token_here
+    ```
 
 ### 5\. **Assign Roles & Permissions**
 
